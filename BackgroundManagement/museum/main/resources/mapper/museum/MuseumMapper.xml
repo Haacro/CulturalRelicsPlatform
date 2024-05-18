@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.museum.mapper.MuseumMapper">
+    
+    <resultMap type="Museum" id="MuseumResult">
+        <result property="id"    column="id"    />
+        <result property="museum"    column="museum"    />
+        <result property="name"    column="name"    />
+        <result property="inventory"    column="inventory"    />
+        <result property="size"    column="size"    />
+        <result property="details"    column="details"    />
+        <result property="era"    column="era"    />
+        <result property="technique"    column="technique"    />
+        <result property="category"    column="category"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="author"    column="author"    />
+        <result property="numberOfVolume"    column="number_of_volume"    />
+        <result property="engravedOrHandcopied"    column="engraved_or_handcopied"    />
+    </resultMap>
+
+    <sql id="selectMuseumVo">
+        select id, museum, name, inventory, size, details, era, technique, category, image_url, author, number_of_volume, engraved_or_handcopied from museum
+    </sql>
+
+    <select id="selectMuseumList" parameterType="Museum" resultMap="MuseumResult">
+        <include refid="selectMuseumVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectMuseumById" parameterType="Long" resultMap="MuseumResult">
+        <include refid="selectMuseumVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMuseum" parameterType="Museum">
+        insert into museum
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="museum != null">museum,</if>
+            <if test="name != null">name,</if>
+            <if test="inventory != null">inventory,</if>
+            <if test="size != null">size,</if>
+            <if test="details != null">details,</if>
+            <if test="era != null">era,</if>
+            <if test="technique != null">technique,</if>
+            <if test="category != null">category,</if>
+            <if test="imageUrl != null">image_url,</if>
+            <if test="author != null">author,</if>
+            <if test="numberOfVolume != null">number_of_volume,</if>
+            <if test="engravedOrHandcopied != null">engraved_or_handcopied,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="museum != null">#{museum},</if>
+            <if test="name != null">#{name},</if>
+            <if test="inventory != null">#{inventory},</if>
+            <if test="size != null">#{size},</if>
+            <if test="details != null">#{details},</if>
+            <if test="era != null">#{era},</if>
+            <if test="technique != null">#{technique},</if>
+            <if test="category != null">#{category},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="author != null">#{author},</if>
+            <if test="numberOfVolume != null">#{numberOfVolume},</if>
+            <if test="engravedOrHandcopied != null">#{engravedOrHandcopied},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMuseum" parameterType="Museum">
+        update museum
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="museum != null">museum = #{museum},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="inventory != null">inventory = #{inventory},</if>
+            <if test="size != null">size = #{size},</if>
+            <if test="details != null">details = #{details},</if>
+            <if test="era != null">era = #{era},</if>
+            <if test="technique != null">technique = #{technique},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="numberOfVolume != null">number_of_volume = #{numberOfVolume},</if>
+            <if test="engravedOrHandcopied != null">engraved_or_handcopied = #{engravedOrHandcopied},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMuseumById" parameterType="Long">
+        delete from museum where id = #{id}
+    </delete>
+
+    <delete id="deleteMuseumByIds" parameterType="String">
+        delete from museum where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
