@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.new_user.mapper.UserPermissionsMapper">
+    
+    <resultMap type="UserPermissions" id="UserPermissionsResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="loginPermission"    column="login_permission"    />
+        <result property="likePermission"    column="like_permission"    />
+        <result property="commentPermission"    column="comment_permission"    />
+        <result property="del"    column="del"    />
+    </resultMap>
+
+    <sql id="selectUserPermissionsVo">
+        select id, user_id, login_permission, like_permission, comment_permission, del from user_permissions
+    </sql>
+
+    <select id="selectUserPermissionsList" parameterType="UserPermissions" resultMap="UserPermissionsResult">
+        <include refid="selectUserPermissionsVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserPermissionsById" parameterType="Long" resultMap="UserPermissionsResult">
+        <include refid="selectUserPermissionsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserPermissions" parameterType="UserPermissions" useGeneratedKeys="true" keyProperty="id">
+        insert into user_permissions
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="loginPermission != null">login_permission,</if>
+            <if test="likePermission != null">like_permission,</if>
+            <if test="commentPermission != null">comment_permission,</if>
+            <if test="del != null">del,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="loginPermission != null">#{loginPermission},</if>
+            <if test="likePermission != null">#{likePermission},</if>
+            <if test="commentPermission != null">#{commentPermission},</if>
+            <if test="del != null">#{del},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserPermissions" parameterType="UserPermissions">
+        update user_permissions
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="loginPermission != null">login_permission = #{loginPermission},</if>
+            <if test="likePermission != null">like_permission = #{likePermission},</if>
+            <if test="commentPermission != null">comment_permission = #{commentPermission},</if>
+            <if test="del != null">del = #{del},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserPermissionsById" parameterType="Long">
+        delete from user_permissions where id = #{id}
+    </delete>
+
+    <delete id="deleteUserPermissionsByIds" parameterType="String">
+        delete from user_permissions where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

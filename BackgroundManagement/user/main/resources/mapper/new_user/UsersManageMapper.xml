@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.new_user.mapper.UsersManageMapper">
+    
+    <resultMap type="UsersManage" id="UsersManageResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="username"    column="username"    />
+        <result property="password"    column="password"    />
+        <result property="email"    column="email"    />
+        <result property="phone"    column="phone"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="lastLoginAt"    column="last_login_at"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectUsersManageVo">
+        select id, name, username, password, email, phone, created_at, last_login_at, status from users_manage
+    </sql>
+
+    <select id="selectUsersManageList" parameterType="UsersManage" resultMap="UsersManageResult">
+        <include refid="selectUsersManageVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="username != null  and username != ''"> and username = #{username}</if>
+        </where>
+    </select>
+    
+    <select id="selectUsersManageById" parameterType="Long" resultMap="UsersManageResult">
+        <include refid="selectUsersManageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUsersManage" parameterType="UsersManage" useGeneratedKeys="true" keyProperty="id">
+        insert into users_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="email != null">email,</if>
+            <if test="phone != null">phone,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="lastLoginAt != null">last_login_at,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="email != null">#{email},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="lastLoginAt != null">#{lastLoginAt},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUsersManage" parameterType="UsersManage">
+        update users_manage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="lastLoginAt != null">last_login_at = #{lastLoginAt},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUsersManageById" parameterType="Long">
+        delete from users_manage where id = #{id}
+    </delete>
+
+    <delete id="deleteUsersManageByIds" parameterType="String">
+        delete from users_manage where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
